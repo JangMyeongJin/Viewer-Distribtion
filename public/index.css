@@ -1,0 +1,147 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    Roboto, sans-serif;
+  background-color: #f5f5f5;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.build-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.build-button:hover {
+  background-color: #357abd;
+}
+
+.build-button:active {
+  transform: translateY(1px);
+}
+
+#status {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+#status.loading {
+  display: block;
+  background-color: #fff8e1;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+#status.success {
+  display: block;
+  background-color: #e8f5e9;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+#status.error {
+  display: block;
+  background-color: #fef2f2;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.settings-container {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.settings-section {
+  flex: 1;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.settings-section h2 {
+  font-size: 1.2rem;
+  color: #495057;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* 기존 container 스타일 수정 */
+.container {
+  max-width: 1200px; /* 더 넓게 조정 */
+  margin: 0 auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 입력 필드 그룹 스타일 개선 */
+.input-group {
+  margin-bottom: 1.2rem;
+}
+
+.input-group:last-child {
+  margin-bottom: 0;
+}
+
+/* 빌드 버튼 위치 조정 */
+.build-button {
+  margin-top: 1rem;
+}
