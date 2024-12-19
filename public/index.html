@@ -22,24 +22,6 @@
               value="D:\pdf_js\pdf.js_backup"
             />
           </div>
-          <div class="input-group">
-            <label for="viewer-branch">Viewer Branch</label>
-            <input
-              type="text"
-              id="viewer-branch"
-              placeholder="예: main"
-              value="main"
-            />
-          </div>
-          <div class="input-group">
-            <label for="viewer-commit-message">Viewer Commit Message</label>
-            <input
-              type="text"
-              id="viewer-commit-message"
-              placeholder="예: 뷰어 업데이트"
-              value="뷰어 업데이트"
-            />
-          </div>
         </div>
 
         <!-- 오른쪽: ProDocEye 설정 -->
@@ -54,48 +36,28 @@
               value="D:\prodoceye"
             />
           </div>
-          <div class="input-group">
-            <label for="doceye-branch">ProDocEye Branch</label>
-            <input
-              type="text"
-              id="doceye-branch"
-              placeholder="예: main"
-              value="main"
-            />
-          </div>
-          <div class="input-group">
-            <label for="doceye-commit-message">ProDocEye Commit Message</label>
-            <input
-              type="text"
-              id="doceye-commit-message"
-              placeholder="예: 뷰어 업데이트"
-              value="뷰어 업데이트"
-            />
-          </div>
         </div>
       </div>
 
-      <button class="build-button" onclick="buildPdf()">배포 시작</button>
+      <button class="build-button" onclick="buildViewer()">뷰어 배포</button>
       <div id="status"></div>
     </div>
 
     <script>
-      async function buildPdf() {
+      async function buildViewer() {
         const buildButton = document.querySelector(".build-button");
-        buildButton.textContent = "배포 중...";
+        buildButton.textContent = "빌드 중...";
         buildButton.disabled = true;
 
         const statusDiv = document.getElementById("status");
-        addStatus("배포 중...");
+        addStatus("빌드 중...");
         statusDiv.classList.add("loading");
 
         const viewerPath = document.getElementById("viewer-path").value;
         const doceyePath = document.getElementById("doceye-path").value;
-        const viewerBranch = document.getElementById("viewer-branch").value;
-        const doceyeBranch = document.getElementById("doceye-branch").value;
 
         try {
-          const response = await fetch("/start", {
+          const response = await fetch("/buildViewer", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -103,44 +65,49 @@
             body: JSON.stringify({
               viewerPath,
               doceyePath,
-              viewerBranch,
-              doceyeBranch,
             }),
           });
 
           const reader = response.body.getReader();
 
-          while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-
-            // 받은 데이터를 문자열로 변환
-            const text = new TextDecoder().decode(value);
-            // 각 줄을 처리
-            const lines = text.split("\n").filter((line) => line.trim());
-
-            for (const line of lines) {
-              const data = JSON.parse(line);
-
-              switch (data.status) {
-                case "lodding":
-                  statusDiv.className = "loading";
-                  addStatus("빌드 완료. 파일 복사 중...");
-                  break;
-                case "success":
-                  statusDiv.className = "success";
-                  addStatus("빌드 및 파일 복사가 완료되었습니다.");
-                  break;
-                case "error":
-                  statusDiv.className = "error";
-                  addStatus("오류 발생: " + data.error);
-                  break;
-              }
-            }
-          }
+          await createStatusMessage(statusDiv, reader);
         } catch (error) {
           statusDiv.className = "error";
           addStatus("오류가 발생했습니다: " + error.message);
+        }
+
+        buildButton.textContent = "뷰어 배포";
+        buildButton.disabled = false;
+      }
+
+      async function createStatusMessage(statusDiv, reader) {
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          // 받은 데이터를 문자열로 변환
+          const text = new TextDecoder().decode(value);
+          // 각 줄을 처리
+          const lines = text.split("\n").filter((line) => line.trim());
+
+          for (const line of lines) {
+            const data = JSON.parse(line);
+
+            switch (data.status) {
+              case "lodding":
+                statusDiv.className = "loading";
+                addStatus(data.message);
+                break;
+              case "success":
+                statusDiv.className = "success";
+                addStatus(data.message);
+                break;
+              case "error":
+                statusDiv.className = "error";
+                addStatus(data.message);
+                break;
+            }
+          }
         }
       }
 
